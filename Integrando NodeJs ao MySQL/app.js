@@ -21,7 +21,21 @@ app.get("/api/test-db", async (request, response) => {
     }
 });
 
+app.get("/api/usuarios", async (request, response) => {
+    try {
+        const connection = await pool.getConnection();
+        const [ dadosUsuarios ] = await connection.query("SELECT * FROM usuario");
+        connection.release();
+        response.status(200).json({ dadosUsuarios });
+
+    } catch (error) {
+
+        response.status(500).json({ ok: false, message: `Erro ao buscar os usuarios. ${error}:${error.message}` });
+    }
+})
+
 app.listen(PORT, () => {
     console.log(`SERVER IS RUNNING ON HTTP://${HOST}:${PORT}/api/test-db`);
     console.log(`SERVER IS RUNNING ON HTTP://${HOST}:${PORT}/api/health`);
+    console.log(`SERVER IS RUNNING ON HTTP://${HOST}:${PORT}/api/usuarios`);
 });

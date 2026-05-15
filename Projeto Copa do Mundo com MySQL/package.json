@@ -1,11 +1,11 @@
 {
-  "name": "integrando-nodejs-ao-mysql",
+  "name": "projeto-copa-do-mundo-com-mysql",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js ",
-    "dev": "nodemon app.js"
+    "start": " node app.js",
+    "dev": " nodemon app.js"
   },
   "keywords": [],
   "author": "Edna Santos",
