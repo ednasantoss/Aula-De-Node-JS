@@ -9,6 +9,10 @@ const usuarios = [
 fs.writeFileSync('db.json', JSON.stringify(usuarios, null));
 console.log("✅ Arquivo 'db.json' criado com sucesso!");
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 521b6518b5b111e7fdd93dd6a1fa6abf637881b3
 //2 - Ler (Read)
 const dados = fs.readFileSync('db.json', 'utf8');
 

@@ -2,8 +2,13 @@ const http = require("http");
 const PORT = 3000;
 const host = 'localhost';
 
+<<<<<<< HEAD
 const server = http.createServer((request, response) => {
     const url = request.url;
+=======
+const server = http.createServer((require, response) => {
+    const url = require.url;
+>>>>>>> 521b6518b5b111e7fdd93dd6a1fa6abf637881b3
     console.log(`Requisição em ${url}`);
     const headers = { "content-type": "text/html; charset=utf-8" };
 

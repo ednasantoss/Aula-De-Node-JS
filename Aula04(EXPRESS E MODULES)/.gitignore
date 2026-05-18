@@ -1,4 +1,8 @@
 .env
+<<<<<<< HEAD
 node_modules/
+=======
+node_modules
+>>>>>>> 521b6518b5b111e7fdd93dd6a1fa6abf637881b3
 .DS_Store
 .vscode
