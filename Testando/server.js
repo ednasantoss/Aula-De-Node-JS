@@ -16,11 +16,7 @@ function criarUsuarios() {
     }
 }
 
-<<<<<<< HEAD
 const server = http.createServer((request, response) => {
-=======
-const server = http.createServer((require, response) => {
->>>>>>> 521b6518b5b111e7fdd93dd6a1fa6abf637881b3
     response.writeHead(200, { 'Content-Type': 'text/json; charset=utf-8' })
     criarUsuarios()
     response.write(JSON.stringify(usuarios))
