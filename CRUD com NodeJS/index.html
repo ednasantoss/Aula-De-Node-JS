@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD Simples</title>
+</head>
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 40px;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 2.5rem;
+        font-family: Impact, sans-serif;
+        color: cadetblue;
+        text-shadow: 2px 2px #000;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    th,
+    td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: center;
+    }
+
+    th {
+        background: #f0f0f0;
+    }
+
+    form {
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    input,
+    button {
+        padding: 6px;
+    }
+</style>
+
+<body>
+    <h1>Aprendendo o CRUD com MYSQL</h1>
+    <form id="addForm">
+        <input type="hidden" id="produtoId">
+        <input type="text" id="nome" placeholder="Nome do Produto" required>
+        <input type="number" id="preco" placeholder="Preço do Produto" required>
+        <input type="number" id="quantidade" placeholder="Quantidade de Produtos" required>
+        <button type="submit">Salvar</button>
+        <button type="button" id="cancelarEdicao" style="display: none;">Cancelar</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Ordem</th>
+                <th>Nome</th>
+                <th>Preço</th>
+                <th>Quantidade</th>
+                <th>Remover</th>
+                <th>Editar</th>
+            </tr>
+        </thead>
+        <tbody id="lista"></tbody>
+
+    </table>
+</body>
+<script>
+    // Variaveis Global
+    const produtoId = document.getElementById("produtoId");
+    const campoNome = document.getElementById("nome");
+    const campoPreco = document.getElementById("preco");
+    const campoQuantidade = document.getElementById("quantidade");
+    const campoCancelar = document.getElementById("cancelarEdicao");
+    const form = document.getElementById("addForm");
+
+    async function carregarDados() {
+        try {
+            const resposta = await fetch('http://localhost:1327/produtos');
+            if (!resposta.ok) {
+                document.getElementById('lista').innerHTML = '';
+                return;
+            }
+            const dados = await resposta.json();
+
+            const itens = Array.isArray(dados)
+                ? dados
+                : Array.isArray(dados && dados.produtos)
+                    ? dados.produtos
+                    : [];
+
+            const lista = document.getElementById('lista');
+            lista.innerHTML = '';
+            if (itens.length === 0) {
+                lista.innerHTML = '<tr><td colspan="5">Nenhum produto encontrado</td></tr>';
+                return;
+            }
+
+            itens.forEach((produto, indice) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+        <td>${indice + 1}</td>
+        <td>${produto.nome ?? ''}</td>
+        <td>${produto.preco ?? ''}</td>
+        <td>${produto.quantidade ?? ''}</td>
+        <td><button onclick="remover(${produto.id})">Remover</button></td>
+        <td><button onclick="editar(${produto.id}, '${produto.nome}', ${produto.preco}, ${produto.quantidade})">Editar</button></td>`;
+                lista.appendChild(tr);
+            });
+        } catch (err) {
+            console.error('Erro ao carregar produtos:', err);
+            document.getElementById('lista').innerHTML = '<tr><td colspan="5">Erro ao carregar produtos</td></tr>';
+        }
+    };
+
+    async function remover(id) {
+        event.preventDefault();
+        await fetch(`http://localhost:1327/produtos/${id}`, { method: 'DELETE' });
+        carregarDados();
+    };
+
+    window.editar = (id, nome, preco, quantidade) => {
+        produtoId.value = id;
+        campoNome.value = nome;
+        campoPreco.value = preco;
+        campoQuantidade.value = quantidade;
+        campoCancelar.style.display = '';
+    };
+
+    cancelarEdicao.onclick = () => {
+        produtoId.value = '';
+        form.reset();
+        cancelarEdicao.style.display = 'none';
+    };
+
+    document.getElementById("addForm").onsubmit = async (event) => {
+        event.preventDefault();
+
+        const id = produtoId.value;
+        const nome = campoNome.value;
+        const preco = campoPreco.value;
+        const quantidade = campoQuantidade.value;
+
+        if (id) {
+            await fetch(`http://localhost:1327/produtos/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nome, preco, quantidade })
+            });
+        } else {
+            await fetch('http://localhost:1327/produtos', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nome, preco, quantidade })
+            });
+        }
+        event.target.reset();
+        produtoId.value = '';
+        cancelarEdicao.style.display = 'none';
+        carregarDados();
+    };
+
+    carregarDados();
+</script>
+
+</html>
