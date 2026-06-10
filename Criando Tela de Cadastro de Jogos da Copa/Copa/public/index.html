@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Copa do Mundo</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+
+    <form id="addForm">
+        <h1>Cadastrar Novo Jogo</h1>
+        <input type="date" id="dataJogo" required>
+
+        <div class="linha-times">
+            <select id="selecioneTime1" required>
+                <option value="" disabled selected>Selecione o Time 1</option>
+            </select>
+
+            <select id="selecioneTime2" required>
+                <option value="" disabled selected>Selecione o Time 2</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn-cadastrar">Cadastrar Jogo</button>
+    </form>
+
+    <div id="customModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-icon" id="modalIcon">✔️</div>
+            <h2 id="modalTitle">Sucesso!</h2>
+            <p id="modalMessage">Jogo cadastrado com sucesso.</p>
+            <button id="modalCloseBtn" class="btn-modal">Fechar</button>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <th>Data</th>
+            <th>Time 1</th>
+            <th>Time 2</th>
+            <th>Score 1</th>
+            <th>Score 2</th>
+            <th>Ações</th>
+            <th></th>
+        </thead>
+        <tbody id="tabela">
+        </tbody>
+    </table>
+
+</body>
+<script src="index.js" defer></script>
+
+</html>
